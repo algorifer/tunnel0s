@@ -46,15 +46,15 @@
   }
 
   .subtitle::before {
-    top: -10%;
-    right: 10%;
+    top: -5px;
+    right: 5px;
     z-index: -2;
     transform: scale(0.95);
   }
 
   .subtitle::after {
-    top: -20%;
-    right: 20%;
+    top: -10px;
+    right: 10px;
     z-index: -4;
     transform: scale(0.9);
   }
