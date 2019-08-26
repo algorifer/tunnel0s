@@ -6,27 +6,35 @@
   // State
   export let placeholder;
   export let value;
-  let input;
+  let textarea;
+
+  $: if (textarea && value.length === 0) {
+    textarea.style.height = `40px`;
+  } else if (textarea) {
+    textarea.style.height = `${textarea.scrollHeight}px`;
+  }
 
   // Events
-  onMount(() => input.focus());
-
+  onMount(() => textarea.focus());
   const dispatch = createEventDispatcher();
   function onInput(evt) {
     if (evt.keyCode === 13) {
-      dispatch("enter", {});
+      evt.preventDefault();
+      if (value.length > 0) {
+        dispatch("enter", {});
+      }
     }
   }
 </script>
 
 <style>
-  input {
+  textarea {
     position: relative;
     z-index: 10;
     display: block;
     width: 100%;
-    min-height: 40px;
-    margin: 10px auto;
+    min-height: 20px;
+    margin: 10px auto 15px;
     padding: 10px;
     font-family: inherit;
     font-weight: 100;
@@ -39,18 +47,18 @@
     outline: none;
     border-radius: 5px;
     word-wrap: break-word;
+    resize: none;
   }
 
-  input:focus {
-    box-shadow: 0 1px 0 var(--main-bg-color), 0 2px 0 var(--med-bg-color),
-      0 3px 0 var(--main-bg-color), 0 4px 0 var(--med-bg-color);
+  textarea:focus {
     border: 1px solid var(--med-bg-color);
   }
 </style>
 
-<input
+<textarea
+  bind:this={textarea}
   type="text"
-  bind:this={input}
   bind:value
-  {placeholder}
-  on:keydown={onInput} />
+  row="0"
+  on:keydown={onInput}
+  {placeholder} />

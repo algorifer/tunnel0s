@@ -1,146 +1,90 @@
 <script>
+  // Libs
   import Room from "ipfs-pubsub-room";
-  import createIPFS from "./utils/createIPFS";
+  import IPFS from "ipfs";
 
-  import { ipfs, ipfsId, username, userRoot } from "./stores/user";
+  // Utils
+  import ipfsConfig from "./utils/ipfsConfig";
+  import createBuffer from "./utils/createBuffer";
+
+  // Svelte
+  import { onMount } from "svelte";
+
+  // Stores
+  import { userID, isUserRoot } from "./stores/user";
   import {
+    ipfs,
     tunnel,
     tunnelName,
-    tunnelMsgs,
-    tunnelId,
-    tunnelSubscribe
+    tunnelMessages,
+    tunnelID,
+    tunnelSubscribe,
+    tunnelPeers
   } from "./stores/tunnels";
 
-  import Title from "./elements/Title.svelte";
-  import CreateTunnel from "./components/CreateTunnel.svelte";
-  import UserName from "./components/UserName.svelte";
-  import Tunnel from "./components/Tunnel.svelte";
+  // Components
+  import ViewPort from "./components/ViewPort.svelte";
 
-  const addMsg = obj => {
-    tunnelMsgs.update(m => [...m, obj]);
-  };
+  // Events
+  const addMessage = msg =>
+    tunnelMessages.update(messages => [
+      ...messages,
+      { ...msg, id: messages.length }
+    ]);
 
   const initApp = () => {
-    addMsg({ type: `sys`, text: `IPFS status: Start` });
-
     // Create IPFS
-    ipfs.set(createIPFS());
-    addMsg({ type: `sys`, text: `IPFS status: Create` });
-
+    ipfs.set(new IPFS(ipfsConfig));
+    // Setup IPFS
     $ipfs.once(`ready`, () => {
+      // Get userID
       $ipfs.id((err, info) => {
-        if (err) {
-          throw err;
-        }
-        ipfsId.set(info.id);
-        addMsg({
-          type: `sys`,
-          text: `IPFS node ready with address ${$ipfsId}`
-        });
+        if (err) throw err;
+
+        userID.set(info.id);
       });
 
       // Create tunnel
-      $tunnel = Room($ipfs, $tunnelId);
+      tunnel.set(Room($ipfs, $tunnelID));
 
-      // For RootUser info
-      if ($userRoot) {
-        addMsg({ type: `sys`, text: `You create ${$tunnelName} tunnel!` });
-        addMsg({
-          type: `sys`,
-          text: `Invite more people: ${window.location.origin}/#tunnel=${$tunnelId}`
-        });
-      }
-
-      // Create tunnel events
-      // Peer joined
+      // Tunnel Events ~ Peer joined
       $tunnel.on(`peer joined`, peer => {
-        addMsg({
-          id: $tunnelMsgs.length + 1,
-          from: peer,
-          type: `sys`,
-          text: `Peer ${peer} joined`
-        });
-
-        // Send welcome message
-        $tunnel.sendTo(
-          peer,
-          Buffer.from(
-            JSON.stringify({
-              type: `sys`,
-              tunnelName: $tunnelName,
-              text: `You joined to ${$tunnelName} tunnel! \n Invite more people: ${window.location.origin}/#tunnel=${$tunnelId}`
-            })
-          )
-        );
+        addMessage({ from: peer, type: `system`, text: `Peer joined` });
       });
 
-      $tunnel.on(`peer joined`, peer => {
+      // Tunnel Events ~ Send Welcome Message
+      $tunnel.on(`peer joined`, peer =>
         $tunnel.sendTo(
           peer,
-          Buffer.from(
-            JSON.stringify({
-              type: `sys`,
-              tunnelName: $tunnelName,
-              text: `You joined to ${$tunnelName} tunnel! \n Invite more people: ${window.location.origin}/#tunnel=${$tunnelId}`
-            })
-          )
-        );
-      });
-
-      // Peer left
-      $tunnel.on(`peer left`, peer =>
-        addMsg({
-          id: $tunnelMsgs.length + 1,
-          from: peer,
-          type: `sys`,
-          text: `Peer ${peer} left`
-        })
+          createBuffer({ type: `welcome`, tunnelName: $tunnelName })
+        )
       );
 
-      // Listen message
-      $tunnel.on("message", message => {
-        const { type, name, text } = JSON.parse(message.data);
+      // Tunnel Events ~ Peer left
+      $tunnel.on(`peer left`, peer => {
+        addMessage({ from: peer, type: `system`, text: `Peer left` });
+      });
 
-        if (JSON.parse(message.data).tunnelName && $userRoot === false) {
-          tunnelName.set(JSON.parse(message.data).tunnelName);
-        } else if (JSON.parse(message.data).tunnelName && $userRoot === true) {
+      // Tunnel Events ~ Add Listener Messages
+      $tunnel.on(`message`, message => {
+        const data = JSON.parse(message.data);
+        const { type, name, text } = data;
+        tunnelPeers.set($tunnel.getPeers());
+
+        if (type === `welcome` && $isUserRoot === false) {
+          tunnelName.set(data.tunnelName);
+        } else if (type === `welcome` && $isUserRoot === true) {
           return;
         }
 
-        addMsg({
-          id: $tunnelMsgs.length,
-          from: message.from,
-          type: type,
-          name: name,
-          text: text
-        });
+        addMessage({ from: message.from, type, name, text });
       });
 
-      $tunnel.on("subscribed", () => tunnelSubscribe.set(true));
+      $tunnel.on(`subscribed`, () => tunnelSubscribe.set(true));
+
+      window.addEventListener(`unload`, async () => await $tunnel.leave());
     });
   };
 </script>
 
-<style>
-  .root {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: space-between;
-    width: 100vw;
-    min-height: 100vh;
-    margin: 0;
-    padding: 40px;
-  }
-</style>
-
-<main class="root">
-  <Title name={$tunnelName} />
-  {#if $tunnelId === null}
-    <CreateTunnel on:createId={initApp} />
-  {:else if $username.length === 0}
-    <UserName />
-  {:else}
-    <Tunnel />
-  {/if}
-</main>
+<ViewPort on:createId={initApp} />

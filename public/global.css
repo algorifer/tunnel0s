@@ -3,24 +3,6 @@
   src: local('InputSans'), local('InputSans-Regular'),
       url('/fonts/InputSans-Regular.woff2') format('woff2'),
       url('/fonts/InputSans-Regular.woff') format('woff');
-  font-weight: normal;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: 'InputSans';
-  src: local('InputSans BoldIta'), local('InputSans-BoldItalic'),
-      url('/fonts/InputSans-BoldItalic.woff2') format('woff2'),
-      url('/fonts/InputSans-BoldItalic.woff') format('woff');
-  font-weight: bold;
-  font-style: italic;
-}
-
-@font-face {
-  font-family: 'InputSans';
-  src: local('InputSans Bold'), local('InputSans-Bold'),
-      url('/fonts/InputSans-Bold.woff2') format('woff2'),
-      url('/fonts/InputSans-Bold.woff') format('woff');
   font-weight: bold;
   font-style: normal;
 }
@@ -30,7 +12,7 @@
   src: local('InputSans Italic'), local('InputSans-Italic'),
       url('/fonts/InputSans-Italic.woff2') format('woff2'),
       url('/fonts/InputSans-Italic.woff') format('woff');
-  font-weight: normal;
+  font-weight: bold;
   font-style: italic;
 }
 
@@ -39,7 +21,7 @@
   src: local('InputSans Thin'), local('InputSans-Thin'),
       url('/fonts/InputSans-Thin.woff2') format('woff2'),
       url('/fonts/InputSans-Thin.woff') format('woff');
-  font-weight: 100;
+  font-weight: normal;
   font-style: normal;
 }
 
@@ -48,15 +30,26 @@
   src: local('InputSans ThinIta'), local('InputSans-ThinItalic'),
       url('/fonts/InputSans-ThinItalic.woff2') format('woff2'),
       url('/fonts/InputSans-ThinItalic.woff') format('woff');
-  font-weight: 100;
+  font-weight: normal;
   font-style: italic;
+}
+
+:root {
+  --main-bg-color: #111111;
+  --win-bg-color: #ffffff;
+  --text-color: #ffffff;
+  --accent-color: #fc533e;
+  --med-f-color: #999999;
+  --dark-f-color: #555555;
+  --med-bg-color: #666666;
+  --dark-bg-color: #333333;
 }
 
 html {
   margin: 0;
   padding: 0;
-  font-size: 14px;
-  line-height: 16px;
+  font-size: 12px;
+  line-height: 20px;
 }
 
 html,
@@ -64,44 +57,23 @@ html,
 *::before,
 *::after {
   box-sizing: border-box;
+  outline: none;
 }
 
 body {
   margin: 0;
   padding: 0;
   font-family: 'InputSans', Arial, Helvetica, sans-serif;
-  font-weight: 100;
-  background: #222222;
-  color: #ffffff;
+  font-weight: normal;
+  background: var(--main-bg-color);
+  color: var(--text-color);
 }
 
-h1 {
-  font-size: 45px;
-}
-h2 {
-  margin-top: 1.5em;
-}
-p {
-  font-size: 16px;
-}
 a {
-  border-bottom: 1px solid white;
-  color: #0076ff;
-  cursor: pointer;
   text-decoration: none;
-  transition: all 0.2s ease;
+  color: var(--accent-color);
+  border-bottom: 1px solid var(--accent-color);
 }
 a:hover {
-  border-bottom: 1px solid #0076ff;
-}
-code,
-pre {
-  color: #d400ff;
-  font-family: Menlo, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono,
-    Bitstream Vera Sans Mono, Courier New, monospace, serif;
-  font-size: 0.92em;
-}
-code:before,
-code:after {
-  content: '\`';
+  border: none;
 }

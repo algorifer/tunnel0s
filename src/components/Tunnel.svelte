@@ -1,46 +1,81 @@
 <script>
+  // Svelte
   import { fly } from "svelte/transition";
-  import { tunnelMsgs, tunnelSubscribe } from "../stores/tunnels";
-  import { ipfsId } from "../stores/user";
 
-  import SysMsg from "./SysMsg.svelte";
-  import UserMsg from "./UserMsg.svelte";
+  // Stores
+  import { tunnelMessages, tunnelSubscribe } from "../stores/tunnels";
+  import { userID, isUserRoot } from "../stores/user";
+
+  // Components
+  import Title from "../elements/Title.svelte";
+  import SysMsg from "../elements/SysMsg.svelte";
+  import UserMsg from "../elements/UserMsg.svelte";
   import Send from "./Send.svelte";
+
+  // State
+  let feed;
+
+  $: if ($tunnelMessages && feed) {
+    feed.scrollTo({
+      top: feed.clientHeight * 2,
+      left: 0
+    });
+  }
 </script>
 
 <style>
-  .tunnel {
+  section {
+    grid-area: tunnel;
     display: flex;
     flex-direction: column;
     align-items: stretch;
     width: 100%;
-    height: 100%;
+    padding: 0 40px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    border: 1px solid var(--dark-bg-color);
+    border-radius: 10px;
+    box-shadow: 0 1px 0 var(--main-bg-color), 0 2px 0 var(--accent-color),
+      0 3px 0 var(--main-bg-color), 0 4px 0 var(--accent-color);
   }
 
-  .msg_list {
+  ul {
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
-    max-height: 100%;
-    margin: 0 0 100px;
+    margin: 0;
     padding: 0;
     list-style: none;
   }
+
+  @media (max-width: 800px) {
+    section {
+      padding: 0 20px;
+      border: none;
+      border-radius: 0;
+      box-shadow: none;
+    }
+  }
 </style>
 
-<section class="tunnel">
-  <ul class="msg_list">
-    {#each $tunnelMsgs as msg (msg.id)}
-      {#if msg.type === `sys`}
-        <SysMsg text={msg.text} />
-      {:else if msg.type === `user` && msg.from === $ipfsId}
-        <UserMsg username={msg.name} text={msg.text} self="true" />
+<section bind:this={feed} in:fly={{ y: 200 }} out:fly={{ y: -200 }}>
+  {#if $isUserRoot}
+    <Title text="You're created a tunnel" />
+  {:else}
+    <Title text="You're joined in tunnel" />
+  {/if}
+  <ul>
+    {#each $tunnelMessages as msg (msg.id)}
+      {#if msg.type === `system`}
+        <SysMsg text={msg.text} root={feed} />
+      {:else if msg.type === `user` && msg.from === $userID}
+        <UserMsg username={msg.name} text={msg.text} self="true" root={feed} />
       {:else if msg.type === `user`}
-        <UserMsg username={msg.name} text={msg.text} />
+        <UserMsg username={msg.name} text={msg.text} root={feed} />
       {/if}
     {/each}
   </ul>
-  {#if $tunnelSubscribe}
-    <Send />
-  {/if}
 </section>
+{#if $tunnelSubscribe}
+  <Send />
+{/if}

@@ -1,36 +1,28 @@
 <script>
-  import { username } from "../stores/user";
+  // Stores
+  import { userName } from "../stores/user";
+
+  // Components
+  import LoginWrapper from "../elements/LoginWrapper.svelte";
   import InputText from "../elements/InputText.svelte";
   import Button from "../elements/Button.svelte";
-  import Separator from "../elements/Separator.svelte";
+  import Title from "../elements/Title.svelte";
 
-  let inputName = ``;
+  // State
+  let input = ``;
 
-  const setUserName = () => {
-    username.set(inputName);
-  };
+  // Events
+  const setUserName = () => userName.set(input);
 </script>
 
-<style>
-  .username {
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: center;
-    width: 100%;
-    max-width: 680px;
-    height: 100%;
-    margin: 40px auto auto;
-  }
-</style>
-
-<section class="username">
-  <Separator text="Pick a UserName" />
+<LoginWrapper>
+  <Title text="UserName" />
+  <p>Enter you name for start your chat</p>
   <InputText
-    bind:value={inputName}
-    placeholder="UserName"
+    bind:value={input}
+    placeholder="Enter your username"
     on:enter={setUserName} />
-  {#if inputName.length !== 0}
-    <Button text={`Enter as ${inputName}`} on:click={setUserName} />
+  {#if input.length !== 0}
+    <Button text={`Join as ${input}`} on:click={setUserName} />
   {/if}
-</section>
+</LoginWrapper>

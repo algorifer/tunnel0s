@@ -1,19 +1,9 @@
-# Svelte Example
+# tunnel_0s
 
-This directory is a brief example of a [Svelte](https://svelte.dev/) app with serverless functions that can be deployed to ZEIT Now with zero configuration.
+Decentralized web chat. Powered by [Svelte](https://svelte.dev/), [IPFS](https://ipfs.io/) and [ipfs-pubsub-room](https://github.com/ipfs-shipyard/ipfs-pubsub-room).
 
-## How we created this example 
+Create by [person0b](https://twitter.com/person0b), for fun and training.
 
-To get started with Svelte on Now, you can use [degit](https://github.com/Rich-Harris/degit) to initialize the project:
+## Help
 
-```shell
-$ npx degit sveltejs/template my-svelte-project
-```
-
-## Deploying this Example
-
-Once initialized, you can deploy the Svelte example with just a single command:
-
-```shell
-$ now
-```
+Help me with design, UI and english :blush:

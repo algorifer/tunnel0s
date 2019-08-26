@@ -1,37 +1,38 @@
 <script>
+  // Utils
+  import createBuffer from "../utils/createBuffer";
+
+  // Stores
   import { tunnel } from "../stores/tunnels";
-  import { username } from "../stores/user";
-  import InputText from "../elements/InputText.svelte";
+  import { userName } from "../stores/user";
+
+  // Components
+  import InputArea from "../elements/InputArea.svelte";
   import Button from "../elements/Button.svelte";
 
-  let newMsg = ``;
+  // State
+  let input = ``;
 
-  const sendMsg = () => {
-    console.log(`send`);
-    try {
-      $tunnel.broadcast(
-        Buffer.from(
-          JSON.stringify({ type: `user`, name: $username, text: newMsg })
-        )
-      );
-      newMsg = "";
-    } catch (err) {
-      console.error("Failed to publish message", err);
-    }
+  // Events
+  const sendMessage = () => {
+    $tunnel.broadcast(
+      createBuffer({ type: `user`, name: $userName, text: input })
+    );
+    input = ``;
   };
 </script>
 
 <style>
   .send {
-    position: fixed;
-    bottom: 20px;
-    left: 0;
-    width: 100%;
+    grid-area: send;
+    align-self: end;
     display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    margin-top: 20px;
-    padding: 0 40px;
+    padding: 0 30px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    border: 1px solid var(--dark-bg-color);
+    box-shadow: 0 1px 0 var(--main-bg-color), 0 2px 0 var(--accent-color),
+      0 3px 0 var(--main-bg-color), 0 4px 0 var(--accent-color);
   }
 
   .input {
@@ -40,20 +41,28 @@
 
   .btn {
     margin-left: 20px;
-    margin-top: 20px;
+  }
+
+  @media (max-width: 800px) {
+    .send {
+      margin-bottom: 6px;
+      padding: -10px 20px;
+      border-radius: 0;
+      border: none;
+    }
   }
 </style>
 
 <div class="send">
   <div class="input">
-    <InputText
-      bind:value={newMsg}
+    <InputArea
+      bind:value={input}
       placeholder="Your new message!"
-      on:enter={sendMsg} />
+      on:enter={sendMessage} />
   </div>
-  {#if newMsg.length !== 0}
+  {#if input.length !== 0}
     <div class="btn">
-      <Button on:click={sendMsg} text="Send" />
+      <Button on:click={sendMessage} text="Send" />
     </div>
   {/if}
 </div>

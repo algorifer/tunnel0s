@@ -1,80 +1,83 @@
 <script>
+  // Svelte
   import { fly } from "svelte/transition";
   import { createEventDispatcher } from "svelte";
 
-  const dispatch = createEventDispatcher();
+  // State
+  export let text = "Button";
 
+  // Events
+  const dispatch = createEventDispatcher();
   function onClick() {
     dispatch("click", {});
   }
-
-  export let text = "Button";
-  let show;
 </script>
 
 <style>
-  .btn {
+  button {
     position: relative;
+    z-index: 10;
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 100%;
-    min-height: 40px;
+    min-height: 30px;
     padding: 10px;
-    margin: 0px auto 20px;
+    margin: 10px 0;
+    margin-left: auto;
     font-family: inherit;
     font-weight: normal;
     font-size: 14px;
+    font-style: italic;
     line-height: 1;
     text-transform: uppercase;
-    background: #222222;
-    color: #ffffff;
-    border: 1px solid #ffffff;
+    background: none;
+    color: var(--text-color);
+    border: none;
     border-radius: 5px;
-    text-shadow: 0 0 5px #ccc;
-    box-shadow: 0 0 2px #ccc;
-    transition: 0.2s;
     cursor: pointer;
+    transition: 0.3s;
+    white-space: nowrap;
   }
 
-  .btn::before {
+  button::before,
+  button::after {
     content: "";
     position: absolute;
     top: 0;
-    left: 0;
-    z-index: -10;
+    right: 0;
+    z-index: -2;
     display: block;
     width: 100%;
     height: 100%;
-    border: 1px solid #989898;
-    background: #222222;
+    background: var(--accent-color);
     border-radius: 5px;
-    box-shadow: 0 0 2px #787878, inset 0 0 4px #787878;
-    transition: 0.2s;
-    transform: scale(1);
+    transform-origin: 100% 0;
+    transform: scaleX(0.6);
+    transition: 0.3s;
   }
 
-  .show::before {
-    top: 5px;
-    transform: scale(0.98);
+  button::after {
+    z-index: -1;
+    background-image: linear-gradient(
+      to bottom,
+      transparent 0px,
+      var(--main-bg-color) 1px,
+      transparent 2px
+    );
+    background-size: 2px 2px;
+    background-repeat: repeat;
+    transition: 0.3s;
   }
 
-  .btn:hover {
-    box-shadow: 0 5px 5px -4px #ccc;
-  }
-
-  .btn:hover::before {
-    opacity: 0;
+  button:hover::before,
+  button:hover::after {
+    transform: scaleX(1);
   }
 </style>
 
 <button
-  class="btn"
-  class:show
   type="button"
   on:click={onClick}
-  transition:fly={{ delay: 0, duration: 300, x: 0, y: 20, opacity: 0 }}
-  on:introend={() => (show = true)}
-  on:outrostart={() => (show = false)}>
+  transition:fly={{ delay: 0, duration: 300, x: 40, y: 0, opacity: 0 }}>
   {text}
 </button>
