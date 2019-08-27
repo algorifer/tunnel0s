@@ -14,8 +14,7 @@
     "webpack-dev-server": "^3.3.1"
   },
   "dependencies": {
-    "ipfs": "^0.37.0",
-    "ipfs-pubsub-room": "^1.4.1",
+    "bugout": "0.0.8",
     "normalize.css": "^8.0.1",
     "query-string": "^6.8.2"
   },

@@ -15,9 +15,7 @@
 
   // Events
   const sendMessage = () => {
-    $tunnel.broadcast(
-      createBuffer({ type: `user`, name: $userName, text: input })
-    );
+    $tunnel.send(input);
     input = ``;
   };
 </script>

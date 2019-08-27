@@ -1,6 +1,6 @@
 # tunnel_0s
 
-Decentralized web chat. Powered by [Svelte](https://svelte.dev/), [IPFS](https://ipfs.io/) and [ipfs-pubsub-room](https://github.com/ipfs-shipyard/ipfs-pubsub-room).
+Decentralized web chat. Powered by [Svelte](https://svelte.dev/) and [bugout](https://chr15m.github.io/bugout/).
 
 Create by [person0b](https://twitter.com/person0b), for fun and training.
 

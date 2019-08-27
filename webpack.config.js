@@ -51,5 +51,9 @@ module.exports = {
       filename: '[name].css'
     })
   ],
+  target: 'web',
+  node: {
+    fs: 'empty'
+  },
   devtool: prod ? false : 'source-map'
 };
