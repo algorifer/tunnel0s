@@ -1,16 +1,14 @@
 <script>
-  // Utils
-  import queryString from "query-string";
-
   // Svelte
-  import { onMount } from "svelte";
+  import { createEventDispatcher } from "svelte";
 
   // Stores
-  import { tunnelName, tunnelID, tunnelMessages } from "../stores/tunnels";
-  import { userName } from "../stores/user";
+  import { currentScreen } from "../stores/app";
+  import { tunnelName } from "../stores/tunnels";
 
   // Components
   import Sidebar from "./Sidebar.svelte";
+  import Info from "./Info.svelte";
   import CreateTunnel from "./CreateTunnel.svelte";
   import ConnectTunnel from "./ConnectTunnel.svelte";
   import UserName from "./UserName.svelte";
@@ -18,21 +16,9 @@
   import Send from "./Send.svelte";
   import Header from "../elements/Header.svelte";
 
-  // State
-  let query = false;
-
-  // Events
-  onMount(
-    () =>
-      (query = queryString.parse(location.hash).tunnel
-        ? queryString.parse(location.hash).tunnel
-        : false)
-  );
-
-  const onToCreate = () => {
-    query = false;
-    window.location.hash = ``;
-  };
+  //Events
+  const dispatch = createEventDispatcher();
+  const onLogin = () => dispatch("initApp");
 </script>
 
 <style>
@@ -41,9 +27,9 @@
     grid-template-columns: 1fr 4fr 2fr;
     grid-template-rows: auto 2fr auto;
     grid-template-areas:
-      "sidebar header extra"
-      "sidebar tunnel extra"
-      "sidebar send extra";
+      "sidebar header info"
+      "sidebar tunnel info"
+      "sidebar send info";
     grid-gap: 20px 40px;
     justify-items: stretch;
     align-items: stretch;
@@ -67,13 +53,14 @@
 <main>
   <Header name={$tunnelName} />
   <Sidebar />
-  {#if query && !$tunnelID}
-    <ConnectTunnel {query} on:toCreate={onToCreate} on:createId />
-  {:else if !$tunnelID}
-    <CreateTunnel on:createId />
-  {:else if !$userName}
-    <UserName />
-  {:else}
+  {#if $currentScreen === `connect`}
+    <ConnectTunnel />
+  {:else if $currentScreen === `create`}
+    <CreateTunnel />
+  {:else if $currentScreen === `username`}
+    <UserName on:login={onLogin} />
+  {:else if $currentScreen === `tunnel`}
     <Tunnel />
+    <Info />
   {/if}
 </main>

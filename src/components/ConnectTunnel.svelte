@@ -1,9 +1,13 @@
 <script>
+  // Utils
+  import queryString from "query-string";
+
   // Svelte
-  import { createEventDispatcher } from "svelte";
+  import { onMount } from "svelte";
 
   // Stores
-  import { tunnelID, tunnelName } from "../stores/tunnels";
+  import { currentScreen } from "../stores/app";
+  import { tunnelID } from "../stores/tunnels";
 
   // Components
   import LoginWrapper from "../elements/LoginWrapper.svelte";
@@ -11,18 +15,18 @@
   import Button from "../elements/Button.svelte";
   import Title from "../elements/Title.svelte";
 
-  const dispatch = createEventDispatcher();
-
-  // State
-  export let query;
-
   // Events
-  const onCreateId = () => dispatch(`createId`, {});
-  const toCreate = () => dispatch(`toCreate`, {});
+  onMount(() =>
+    queryString.parse(location.hash).tunnel
+      ? tunnelID.set(queryString.parse(location.hash).tunnel)
+      : currentScreen.set(`create`)
+  );
 
-  const onConnectTunnel = () => {
-    tunnelID.set(query);
-    onCreateId();
+  const onJoinClick = () => currentScreen.set(`username`);
+
+  const onCreateClick = () => {
+    window.location.hash = ``;
+    currentScreen.set(`create`);
   };
 </script>
 
@@ -38,10 +42,10 @@
     You have followed by tunnel invitation link. Click at join button.
     <br />
     <br />
-    > Tunnel's ID: {query}
+    > Tunnel's ID: {$tunnelID}
   </p>
-  <Button text="Join" on:click={onConnectTunnel} />
+  <Button text="Join" on:click={onJoinClick} />
   <Title text="Or Create" />
   <p>You can create your own tunnel and invite people.</p>
-  <Button text="Create" on:click={toCreate} />
+  <Button text="Create" on:click={onCreateClick} />
 </LoginWrapper>

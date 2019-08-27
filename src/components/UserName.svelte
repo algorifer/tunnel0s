@@ -1,5 +1,9 @@
 <script>
+  // Svelte
+  import { createEventDispatcher } from "svelte";
+
   // Stores
+  import { currentScreen } from "../stores/app";
   import { userName } from "../stores/user";
 
   // Components
@@ -12,7 +16,12 @@
   let input = ``;
 
   // Events
-  const setUserName = () => userName.set(input);
+  const dispatch = createEventDispatcher();
+  const setUserName = () => {
+    userName.set(input);
+    currentScreen.set(`tunnel`);
+    dispatch("login");
+  };
 </script>
 
 <LoginWrapper>
