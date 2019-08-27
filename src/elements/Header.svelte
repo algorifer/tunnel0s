@@ -135,6 +135,7 @@
     position: fixed;
     top: 100px;
     right: 40px;
+    z-index: 1000;
     display: inline-block;
     padding: 10px;
     font-size: 16px;
