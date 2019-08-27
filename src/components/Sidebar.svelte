@@ -35,14 +35,7 @@
       <a href="https://svelte.dev/" target="_blank">Svelte</a>
     </li>
     <li>
-      <a href="https://ipfs.io/" target="_blank">IPFS</a>
-    </li>
-    <li>
-      <a
-        href="https://github.com/ipfs-shipyard/ipfs-pubsub-room"
-        target="_blank">
-        ipfs-pubsub-room
-      </a>
+      <a href="https://chr15m.github.io/bugout/" target="_blank">bugout</a>
     </li>
   </ul>
   <div class="sep" />

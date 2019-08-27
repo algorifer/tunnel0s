@@ -3,8 +3,8 @@
   import { fly } from "svelte/transition";
 
   // Stores
-  import { tunnelMessages, tunnelSubscribe } from "../stores/tunnels";
-  import { userID, isUserRoot } from "../stores/user";
+  import { tunnelMessages, tunnelSeens } from "../stores/tunnels";
+  import { userID, isServer } from "../stores/user";
 
   // Components
   import Title from "../elements/Title.svelte";
@@ -59,7 +59,7 @@
 </style>
 
 <section bind:this={feed} in:fly={{ y: 200 }} out:fly={{ y: -200 }}>
-  {#if $isUserRoot}
+  {#if $isServer}
     <Title text="You're created a tunnel" />
   {:else}
     <Title text="You're joined in tunnel" />
@@ -76,6 +76,6 @@
     {/each}
   </ul>
 </section>
-{#if $tunnelSubscribe}
+{#if $tunnelSeens.length > 1}
   <Send />
 {/if}

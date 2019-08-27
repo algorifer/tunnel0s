@@ -1,13 +1,8 @@
 <script>
-  // Utils
-  import getRandomId from "../utils/getRandomId";
-
-  // Svelte
-  import { createEventDispatcher } from "svelte";
-
   // Stores
-  import { tunnelID, tunnelName } from "../stores/tunnels";
-  import { isUserRoot } from "../stores/user";
+  import { currentScreen } from "../stores/app";
+  import { tunnelName } from "../stores/tunnels";
+  import { isServer } from "../stores/user";
 
   // Components
   import LoginWrapper from "../elements/LoginWrapper.svelte";
@@ -18,17 +13,10 @@
   // State
   let input = ``;
 
-  // Events
-  const dispatch = createEventDispatcher();
-  const onCreateId = () => dispatch("createId", {});
-
   const onCreateTunnel = () => {
     tunnelName.set(input);
-    isUserRoot.set(true);
-    const newTunnelID = getRandomId(54);
-    window.location.hash = `#tunnel=${newTunnelID}`;
-    tunnelID.set(newTunnelID);
-    onCreateId();
+    isServer.set(true);
+    currentScreen.set(`username`);
   };
 </script>
 
