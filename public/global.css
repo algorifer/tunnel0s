@@ -35,20 +35,18 @@
 }
 
 :root {
-  --main-bg-color: #111111;
-  --win-bg-color: #ffffff;
-  --text-color: #ffffff;
+  --bg-color: #ffffff;
+  --alt-bg-color: #eeeeee;
+  --text-color: #000000;
+  --alt-text-color: #aaaaaa;
+  --hover-bg-color: #f4f4f4;
   --accent-color: #fc533e;
-  --med-f-color: #999999;
-  --dark-f-color: #555555;
-  --med-bg-color: #666666;
-  --dark-bg-color: #333333;
 }
 
 html {
   margin: 0;
   padding: 0;
-  font-size: 12px;
+  font-size: 14px;
   line-height: 20px;
 }
 
@@ -65,7 +63,7 @@ body {
   padding: 0;
   font-family: 'InputSans', Arial, Helvetica, sans-serif;
   font-weight: normal;
-  background: var(--main-bg-color);
+  background: var(--alt-bg-color);
   color: var(--text-color);
 }
 

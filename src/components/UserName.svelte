@@ -1,16 +1,18 @@
 <script>
   // Svelte
   import { createEventDispatcher } from "svelte";
+  import { fly } from "svelte/transition";
 
   // Stores
   import { currentScreen } from "../stores/app";
   import { userName } from "../stores/user";
 
   // Components
-  import LoginWrapper from "../elements/LoginWrapper.svelte";
-  import InputText from "../elements/InputText.svelte";
-  import Button from "../elements/Button.svelte";
-  import Title from "../elements/Title.svelte";
+  import EnterWrapper from "../elements/EnterWrapper.svelte";
+  import EnterCard from "../elements/EnterCard.svelte";
+  import EnterTitle from "../elements/EnterTitle.svelte";
+  import EnterInput from "../elements/EnterInput.svelte";
+  import EnterButton from "../elements/EnterButton.svelte";
 
   // State
   let input = ``;
@@ -24,14 +26,28 @@
   };
 </script>
 
-<LoginWrapper>
-  <Title text="UserName" />
-  <p>Enter you name for start your chat</p>
-  <InputText
-    bind:value={input}
-    placeholder="Enter your username"
-    on:enter={setUserName} />
-  {#if input.length !== 0}
-    <Button text={`Join as ${input}`} on:click={setUserName} />
-  {/if}
-</LoginWrapper>
+<style>
+  p {
+    margin: 0 auto;
+    padding: 20px;
+    font-size: 20px;
+    line-height: 1;
+  }
+</style>
+
+<EnterWrapper>
+  <EnterCard>
+    <EnterTitle text="UserName" />
+    {#if input.length !== 0}
+      <EnterButton text={`Join as ${input}`} on:click={setUserName} />
+    {:else}
+      <p in:fly={{ x: 40, duration: 300 }} out:fly={{ duration: 0 }}>
+        Enter you name for start your chat
+      </p>
+    {/if}
+    <EnterInput
+      bind:value={input}
+      placeholder="Enter your username"
+      on:enter={setUserName} />
+  </EnterCard>
+</EnterWrapper>
