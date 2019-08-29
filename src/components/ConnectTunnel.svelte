@@ -10,10 +10,11 @@
   import { tunnelID } from "../stores/tunnels";
 
   // Components
-  import LoginWrapper from "../elements/LoginWrapper.svelte";
-  import InputText from "../elements/InputText.svelte";
-  import Button from "../elements/Button.svelte";
-  import Title from "../elements/Title.svelte";
+  import EnterWrapper from "../elements/EnterWrapper.svelte";
+  import EnterCard from "../elements/EnterCard.svelte";
+  import EnterTitle from "../elements/EnterTitle.svelte";
+  import EnterButton from "../elements/EnterButton.svelte";
+  import EnterSwitch from "../elements/EnterSwitch.svelte";
 
   // Events
   onMount(() =>
@@ -28,24 +29,33 @@
     window.location.hash = ``;
     currentScreen.set(`create`);
   };
+
+  const onKeydown = evt =>
+    evt.keyCode === 40
+      ? onCreateClick()
+      : evt.keyCode === 13
+      ? onJoinClick()
+      : null;
 </script>
 
 <style>
   p {
+    margin: 0 auto;
+    padding: 20px;
+    font-size: 20px;
+    line-height: 1;
+    /* text-transform: uppercase; */
     word-wrap: break-word;
   }
 </style>
 
-<LoginWrapper class="connet_tunnel">
-  <Title text="Join in tunnel" />
-  <p>
-    You have followed by tunnel invitation link. Click at join button.
-    <br />
-    <br />
-    > Tunnel's ID: {$tunnelID}
-  </p>
-  <Button text="Join" on:click={onJoinClick} />
-  <Title text="Or Create" />
-  <p>You can create your own tunnel and invite people.</p>
-  <Button text="Create" on:click={onCreateClick} />
-</LoginWrapper>
+<svelte:window on:keydown={onKeydown} />
+
+<EnterWrapper class="connet_tunnel">
+  <EnterCard>
+    <EnterTitle text="Join in tunnel" />
+    <p>You have followed by tunnel invitation link. Click at join button.</p>
+    <EnterButton text="Join" on:click={onJoinClick} />
+  </EnterCard>
+  <EnterSwitch text="Create Tunnel" on:click={onCreateClick} />
+</EnterWrapper>

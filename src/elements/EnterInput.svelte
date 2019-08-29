@@ -21,30 +21,20 @@
 
 <style>
   input {
-    position: relative;
-    z-index: 10;
     display: block;
     width: 100%;
     min-height: 40px;
-    margin: 10px auto;
+    margin-top: auto;
     padding: 10px;
     font-family: inherit;
-    font-weight: 100;
-    font-size: 14px;
+    font-weight: normal;
+    text-align: center;
     border: none;
-    background: var(--main-bg-color);
-    border: 1px solid var(--dark-bg-color);
-    color: #ffffff;
+    background: var(--text-color);
+    color: var(--bg-color);
     transition: 0.3s;
     outline: none;
-    border-radius: 5px;
     word-wrap: break-word;
-  }
-
-  input:focus {
-    box-shadow: 0 1px 0 var(--main-bg-color), 0 2px 0 var(--med-bg-color),
-      0 3px 0 var(--main-bg-color), 0 4px 0 var(--med-bg-color);
-    border: 1px solid var(--med-bg-color);
   }
 </style>
 

@@ -28,37 +28,41 @@
 </script>
 
 <style>
+  div {
+    display: flex;
+    width: 100%;
+    padding: 10px;
+    background: var(--alt-bg-color);
+    color: var(--alt-text-color);
+    border-radius: 5px;
+  }
+
+  div::before {
+    content: ">";
+    margin-right: 5px;
+  }
+
   textarea {
-    position: relative;
-    z-index: 10;
     display: block;
     width: 100%;
-    min-height: 20px;
-    margin: 10px auto 15px;
-    padding: 10px;
     font-family: inherit;
     font-weight: 100;
-    font-size: 14px;
     border: none;
-    background: var(--main-bg-color);
-    border: 1px solid var(--dark-bg-color);
-    color: #ffffff;
+    background: var(--alt-bg-color);
+    color: var(--text-color);
     transition: 0.3s;
     outline: none;
-    border-radius: 5px;
     word-wrap: break-word;
     resize: none;
   }
-
-  textarea:focus {
-    border: 1px solid var(--med-bg-color);
-  }
 </style>
 
-<textarea
-  bind:this={textarea}
-  type="text"
-  bind:value
-  row="0"
-  on:keydown={onInput}
-  {placeholder} />
+<div>
+  <textarea
+    bind:this={textarea}
+    type="text"
+    bind:value
+    row="0"
+    on:keydown={onInput}
+    {placeholder} />
+</div>

@@ -72,7 +72,7 @@
         addMessage({
           from: address,
           type: `system`,
-          text: `${res.userName} join in tunnel_${$tunnelName}`
+          text: `${res.userName} join`
         });
       })
     );
